@@ -1,0 +1,46 @@
+--[[
+    ____  ___  __________     _____            __                     
+   / __ \/   |/_  __/ __ \   / ___/__  _______/ /____  ____ ___  _____
+  / /_/ / /| | / / / /_/ /   \__ \/ / / / ___/ __/ _ \/ __ `__ \/ ___/
+ / ____/ ___ |/ / / _, _/   ___/ / /_/ (__  ) /_/  __/ / / / / (__  ) 
+/_/   /_/  |_/_/ /_/ |_|   /____/\__, /____/\__/\___/_/ /_/ /_/____/  
+                                /____/                                
+
+	Module: AL_CORE.lua
+	Version: 1
+	Scripted by: AccelRanger
+]]
+
+local remoteEvent
+local remoteFunction
+
+for _,v in pairs(game.Teams:GetDescendants()) do
+	if v:IsA("RemoteEvent") then
+		if v:HasTag("PATR_RE") then
+			RemoteEvent = v
+		end
+	end
+	if v:IsA("RemoteFunction") then
+		if v:HasTag("PATR_RF") then
+			RemoteFunction = v
+		end
+	end
+end
+
+RemoteEvent.OnClientEvent:Connect(function(action, arg)
+	if action == "antiLeave" then
+		if arg == true then
+			for _,v in game:GetDescendants() do
+				if v:HasTag("AL_CODE") then
+					v.Enabled = true
+				end
+			end
+		elseif arg == false then
+			for _,v in game:GetDescendants() do
+				if v:HasTag("AL_CODE") then
+					v.Enabled = false
+				end
+			end
+		end
+	end
+end)
