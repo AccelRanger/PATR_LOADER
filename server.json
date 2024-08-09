@@ -1,4 +1,5 @@
---[[
+{
+	["Source"]: "--[[
     ____  ___  __________     _____            __                     
    / __ \/   |/_  __/ __ \   / ___/__  _______/ /____  ____ ___  _____
   / /_/ / /| | / / / /_/ /   \__ \/ / / / ___/ __/ _ \/ __ `__ \/ ___/
@@ -99,4 +100,5 @@ RemoteEvent.OnServerEvent:Connect(function(Player, Action, Arg, Heading, Subhead
 			RemoteEvent:FireAllClients("antiLeave", false)
 		end
 	end
-end)
+end)"
+}
