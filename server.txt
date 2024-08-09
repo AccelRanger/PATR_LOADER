@@ -1,6 +1,3 @@
-{
-	["Source"]: "
-
 local remoteEvent
 local remoteFunction
 local sound
@@ -90,4 +87,3 @@ RemoteEvent.OnServerEvent:Connect(function(Player, Action, Arg, Heading, Subhead
 		end
 	end
 end)"
-}
